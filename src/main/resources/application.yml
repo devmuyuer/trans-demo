@@ -1,0 +1,51 @@
+#debug: true
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  # mongodb 连接
+  data:
+    mongodb:
+      uri: mongodb://192.168.0.68:27017,192.168.0.69:27017,192.168.0.70:27017/glcloud?replicaSet=rs0
+      database: glcloud
+logging:
+  level:
+    org.springframework.data.mongodb.core: DEBUG
+# 主库 primary
+primary:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@192.168.0.63:1521:helowin
+    username: glcloud
+    password: glcloud
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle10gDialect
+        format_sql: false
+        id.new_generator_mappings: true
+        hbm2ddl:
+          auto: update
+        #字段映射方式
+        physical_naming_strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
+# 从库 slave
+slave:
+  datasource:
+    driver-class-name: org.hibernate.dialect.MySQL5InnoDBDialect
+    url: jdbc:mysql://192.168.0.66:3306/userdb?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: glcloud
+    password: glcloud
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: false
+        hbm2ddl:
+          auto: update
+        #字段映射方式
+#        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+server:
+  port: 8077
